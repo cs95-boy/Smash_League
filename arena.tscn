@@ -1,0 +1,90 @@
+[gd_scene load_steps=13 format=3 uid="uid://se8ctw3tdwf2"]
+
+[ext_resource type="Script" uid="uid://cqi1yvkrkdmoe" path="res://Data/scripts/arena.gd" id="1_dbc16"]
+[ext_resource type="PackedScene" uid="uid://cjute5y2qw1qj" path="res://Resources/models/court.tscn" id="1_huhvt"]
+[ext_resource type="Script" uid="uid://cqv8idxl27n8e" path="res://Data/scripts/shuttle_cock.gd" id="2_k38q6"]
+[ext_resource type="PackedScene" uid="uid://ck4twmb1p4hnh" path="res://Data/scenes/player.tscn" id="2_nqeyx"]
+[ext_resource type="PackedScene" uid="uid://ds8s44w7yaex5" path="res://Data/scenes/shuttlecock.tscn" id="4_dbc16"]
+[ext_resource type="Script" uid="uid://u7rb6t4vvuwq" path="res://Data/scripts/camera.gd" id="4_wfkme"]
+[ext_resource type="PackedScene" uid="uid://d3r4q58rh011f" path="res://Data/scenes/game_ui.tscn" id="7_dbc16"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wfkme"]
+size = Vector3(15.5, 10, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0mviv"]
+size = Vector3(15.5, 10, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k38q6"]
+size = Vector3(0.1, 10, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dbc16"]
+size = Vector3(0.1, 10, 11)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dbc16"]
+friction = 0.5
+rough = true
+bounce = 0.5
+absorbent = true
+
+[node name="Arena" type="Node3D"]
+script = ExtResource("1_dbc16")
+
+[node name="Hall" type="Node3D" parent="."]
+
+[node name="Court" type="Node3D" parent="Hall"]
+
+[node name="court" parent="Hall/Court" instance=ExtResource("1_huhvt")]
+
+[node name="left_limit" type="CollisionShape3D" parent="Hall/Court/court"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.01553, 5.4642)
+shape = SubResource("BoxShape3D_wfkme")
+
+[node name="right_limit" type="CollisionShape3D" parent="Hall/Court/court"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9755, -5.52581)
+shape = SubResource("BoxShape3D_0mviv")
+
+[node name="forward_limit" type="CollisionShape3D" parent="Hall/Court/court"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.82513, 5.01486, 0)
+shape = SubResource("BoxShape3D_k38q6")
+
+[node name="backward_limit" type="CollisionShape3D" parent="Hall/Court/court"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.86222, 5.05561, 0)
+shape = SubResource("BoxShape3D_dbc16")
+
+[node name="Net" type="Node3D" parent="Hall/Court"]
+
+[node name="Shuttle_cock" type="Node3D" parent="Hall/Court"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -1.69521, 0.9026, 1.48464)
+script = ExtResource("2_k38q6")
+
+[node name="shuttlecock" parent="Hall/Court/Shuttle_cock" instance=ExtResource("4_dbc16")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 8.11126, 4.11835, 0)
+mass = 0.03
+physics_material_override = SubResource("PhysicsMaterial_dbc16")
+
+[node name="Sun" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Sun"]
+transform = Transform3D(1, 0, 0, 0, 0.459053, 0.888409, 0, -0.888409, 0.459053, 0, 13.3026, 0)
+
+[node name="Players" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.180406, 0, 1.62371)
+
+[node name="Player" parent="Players" instance=ExtResource("2_nqeyx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.837456, 0)
+
+[node name="Player_target" type="Node3D" parent="Players/Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.87534, 2.01833, 0)
+
+[node name="Camera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3486, 3.44413, 0)
+script = ExtResource("4_wfkme")
+
+[node name="Player_camera" type="Camera3D" parent="Camera"]
+transform = Transform3D(-4.37114e-08, -0.573576, 0.819152, 0, 0.819152, 0.573576, -1, 2.50718e-08, -3.58063e-08, 0, 0, 0)
+current = true
+fov = 45.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Game_UI" parent="CanvasLayer" instance=ExtResource("7_dbc16")]
